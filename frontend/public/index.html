@@ -1,14 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta name="description" content="MindConnect - Mental Health Support Platform" />
-    <title>MindConnect - Mental Health Platform</title>
-  </head>
-  <body>
-    <noscript>Loading...</noscript>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Welcome</h1>
+      <p>Start mental health journey</p>
+    </div>
+
+    <div class="role-buttons">
+      <button id="patientBtn" class="role-btn active">Patient</button>
+      <button id="therapistBtn" class="role-btn">Therapist</button>
+    </div>
+
+    <form id="registerForm">
+      <label for="fullname">Full Names:</label>
+      <input type="text" id="fullname" placeholder="Enter your full name" required>
+
+      <label for="email">Email Address:</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+
+      <label for="phone">Phone:</label>
+      <input type="tel" id="phone" placeholder="Enter your phone number" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+
+      <!-- Therapist-only fields (hidden by default) -->
+      <div id="therapistFields" style="display:none;">
+        <label for="specialization">Specialization:</label>
+        <input type="text" id="specialization" placeholder="e.g. Clinical Psychologist">
+
+        <label for="license">License Number:</label>
+        <input type="text" id="license" placeholder="Enter your license ID">
+      </div>
+
+      <button type="submit" class="signup-btn">SIGN UP</button>
+    </form>
+  </div>
+
+  <!-- Inline JavaScript -->
+  <script>
+    const patientBtn = document.getElementById("patientBtn");
+    const therapistBtn = document.getElementById("therapistBtn");
+    const therapistFields = document.getElementById("therapistFields");
+    const form = document.getElementById("registerForm");
+
+    // Role switch behavior
+    patientBtn.onclick = function() {
+      patientBtn.classList.add("active");
+      therapistBtn.classList.remove("active");
+      therapistFields.style.display = "none";
+    };
+
+    therapistBtn.onclick = function() {
+      therapistBtn.classList.add("active");
+      patientBtn.classList.remove("active");
+      therapistFields.style.display = "block";
+    };
+
+    // Handle form submission
+    form.onsubmit = function(e) {
+      e.preventDefault();
+
+      const role = therapistBtn.classList.contains("active") ? "Therapist" : "Patient";
+      const name = document.getElementById("fullname").value;
+      const email = document.getElementById("email").value;
+
+      if (role === "Therapist") {
+        const specialization = document.getElementById("specialization").value;
+        const license = document.getElementById("license").value;
+        alert(`Therapist Registered:\nName: ${name}\nEmail: ${email}\nSpecialization: ${specialization}\nLicense: ${license}`);
+      } else {
+        alert(`Patient Registered:\nName: ${name}\nEmail: ${email}`);
+      }
+
+      form.reset();
+      therapistFields.style.display = "none";
+      patientBtn.classList.add("active");
+      therapistBtn.classList.remove("active");
+    };
+  </script>
+</body>
 </html>
