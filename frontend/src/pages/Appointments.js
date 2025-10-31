@@ -79,3 +79,19 @@ function Appointments() {
               </Card>
             ))}
           </Grid>
+  <Grid item xs={12} md={7}>      
+            {selectedTherapist && (
+              <Card sx={{ p: 3 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <Avatar sx={{ bgcolor: '#6d28d9', mr: 2, width: 64, height: 64 }}>
+                    {selectedTherapist.avatar}
+                  </Avatar>
+                  <Box>
+                    <Typography variant="h5">Dr. {selectedTherapist.User?.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Licensed Clinical Psychologist - Anxiety & Depression Specialist
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Typography variant="h6" sx={{ mb: 2 }}>Select Session Type</Typography>
