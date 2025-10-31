@@ -95,3 +95,59 @@ function Appointments() {
                 </Box>
 
                 <Typography variant="h6" sx={{ mb: 2 }}>Select Session Type</Typography>
+
+                <Grid container spacing={2} sx={{ mb: 3 }}>
+                  {sessions.map((session) => (
+                    <Grid item xs={4} key={session.type}>
+                      <Card 
+                        sx={{ 
+                          p: 2, cursor: 'pointer', textAlign: 'center',
+                          border: sessionType === session.type ? '2px solid #6d28d9' : '1px solid #e0e0e0'
+                        }}
+                        onClick={() => setSessionType(session.type)}
+                      >
+                        <Box sx={{ color: '#6d28d9', mb: 1 }}>{session.icon}</Box>
+                        <Typography variant="subtitle2">{session.title}</Typography>
+                        <Typography variant="h6" color="primary">${session.price}</Typography>
+                      </Card>
+                    </Grid>
+                  ))}
+                </Grid>
+
+                <Button 
+                  variant="contained" 
+                  fullWidth 
+                  onClick={() => setOpenDialog(true)}
+                  sx={{ bgcolor: '#6d28d9' }}
+                >
+                  Book Session
+                </Button>
+              </Card>
+            )}
+          </Grid>
+        </Grid>
+      </Container>
+
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogContent>
+          <Typography variant="h6" sx={{ mb: 2 }}>Book Appointment</Typography>
+          <TextField
+            fullWidth
+            type="datetime-local"
+            label="Date & Time"
+            value={appointmentDate}
+            onChange={(e) => setAppointmentDate(e.target.value)}
+            InputLabelProps={{ shrink: true }}
+            sx={{ mb: 2 }}
+          />
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Button onClick={() => setOpenDialog(false)} sx={{ flex: 1 }}>Cancel</Button>
+            <Button onClick={handleBook} variant="contained" sx={{ flex: 1 }}>Book</Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+export default Appointments;
