@@ -42,3 +42,40 @@ function Appointments() {
     { type: 'group', title: 'Group', icon: <Group />, price: 80 },
     { type: 'phone', title: 'Phone', icon: <Phone />, price: 100 }
   ];
+    return (
+    <>
+      <AppBar position="static" sx={{ bgcolor: '#6d28d9' }}>
+        <Toolbar>
+          <IconButton color="inherit" onClick={() => navigate('/dashboard')}>
+            <BackIcon />
+          </IconButton>
+          <Typography variant="h6">Book an appointment</Typography>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="lg" sx={{ mt: 3 }}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={5}>
+            {therapists.map((therapist) => (
+              <Card 
+                key={therapist.id} 
+                sx={{ mb: 2, cursor: 'pointer', '&:hover': { bgcolor: '#f9f8ff' }}}
+                onClick={() => setSelectedTherapist(therapist)}
+              >
+                <CardContent sx={{ display: 'flex', alignItems: 'center', p: 2 }}>
+                  <Avatar sx={{ bgcolor: '#6d28d9', mr: 2 }}>
+                    {therapist.avatar}
+                  </Avatar>
+                  <Box>
+                    <Typography variant="h6">Dr. {therapist.User?.name}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Licensed Clinical Psychologist
+                    </Typography>
+                    <Typography variant="caption">
+                      8 years • +1200 sessions • 98% rate
+                    </Typography>
+                  </Box>
+                </CardContent>
+              </Card>
+            ))}
+          </Grid>
