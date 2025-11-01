@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mind Connect Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h2 class="logo">MIND CONNECT</h2>
+      <div class="profile">
+        <div class="avatar">JB</div>
+        <p>Johnson B</p>
+      </div>
+      <nav class="nav">
+        <ul>
+          <li class="nav-item active" data-page="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</li>
+          <li class="nav-item" data-page="clients"><i class="fas fa-users"></i> Clients</li>
+          <li class="nav-item" data-page="messages"><i class="fas fa-envelope"></i> Messages</li>
+          <li class="nav-item" data-page="chat"><i class="fas fa-comments"></i> Chat rooms</li>
+          <li class="nav-item" data-page="reports"><i class="fas fa-chart-bar"></i> Reports</li>
+          <li class="nav-item" data-page="billing"><i class="fas fa-dollar-sign"></i> Billing</li>
+          <li class="nav-item" data-page="settings"><i class="fas fa-cog"></i> Settings</li>
+          <li class="nav-item logout"><i class="fas fa-sign-out-alt"></i> Logout</li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <div id="dashboard-page" class="page active">
+        <header>
+          <h1>Welcome back, Dr. Johnson!</h1>
+          <p>Here's your practice overview for today, <span id="current-date"></span></p>
+          <button class="add-appointment-btn"><i class="fas fa-plus"></i> New Appointment</button>
+        </header>
+
+      <section class="stats">
+        <div class="card">8<br /><span>Appointments Today</span></div>
+        <div class="card">42<br /><span>Active Clients</span></div>
+        <div class="card">127<br /><span>Sessions this month</span></div>
+        <div class="card">4.9<br /><span>Average Rating</span></div>
+      </section>
+
+      <section class="appointments">
+        <h2>Today's Appointments...</h2>
+        <div class="appointment">
+          <p class="time">09:00 AM</p>
+          <div class="info">
+            <h3>John Smith</h3>
+            <p>Individual Therapy • Anxiety</p>
+          </div>
+          <button class="notes" data-client="John Smith">Notes</button>
+          <button class="start" data-client="John Smith">Start Session</button>
+        </div>
+
+        <div class="appointment">
+          <p class="time">10:30 AM</p>
+          <div class="info">
+            <h3>Emily Davis</h3>
+            <p>Follow-up • Depression</p>
+          </div>
+          <button class="notes" data-client="Emily Davis">Notes</button>
+          <button class="start" data-client="Emily Davis">Start Session</button>
+        </div>
+
+        <div class="appointment">
+          <p class="time">12:30 PM</p>
+          <div class="info">
+            <h3>Michael Johnson</h3>
+            <p>Initial Consultation • Stress</p>
+          </div>
+          <button class="notes" data-client="Michael Johnson">Notes</button>
+          <button class="start" data-client="Michael Johnson">Start Session</button>
+        </div>
+      </section>
+
+      <section class="summary">
+        <div class="last-month">
+          <h3>Last Month</h3>
+          <p><strong>32</strong> Sessions</p>
+          <p><strong>18h</strong> Hours spent</p>
+          <p><strong>$2500</strong> Revenue</p>
+          <p><strong>96%</strong> Attendance</p>
+        </div>
+
+        <div class="today">
+          <h3>Today</h3>
+          <h2>27</h2>
+          <p>Oct, 2025</p>
+        </div>
+      </section>
+      </div>
+
+      <!-- Clients Page -->
+      <div id="clients-page" class="page">
+        <header>
+          <h1>Client Management</h1>
+          <button class="add-client-btn"><i class="fas fa-user-plus"></i> Add Client</button>
+        </header>
+        <div class="clients-grid" id="clients-grid"></div>
+      </div>
+
+      <!-- Messages Page -->
+      <div id="messages-page" class="page">
+        <header><h1>Messages</h1></header>
+        <div class="messages-container">
+          <p class="placeholder">No new messages</p>
+        </div>
+      </div>
+
+      <!-- Other Pages -->
+      <div id="chat-page" class="page"><header><h1>Chat Rooms</h1></header><p class="placeholder">Chat functionality coming soon</p></div>
+      <div id="reports-page" class="page"><header><h1>Reports</h1></header><p class="placeholder">Reports dashboard coming soon</p></div>
+      <div id="billing-page" class="page"><header><h1>Billing</h1></header><p class="placeholder">Billing management coming soon</p></div>
+      <div id="settings-page" class="page"><header><h1>Settings</h1></header><p class="placeholder">Settings panel coming soon</p></div>
+    </main>
+
+    <!-- Modals -->
+    <div id="notes-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Session Notes - <span id="notes-client-name"></span></h2>
+        <textarea id="notes-text" placeholder="Enter session notes..."></textarea>
+        <button id="save-notes">Save Notes</button>
+      </div>
+    </div>
+
+    <div id="appointment-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>New Appointment</h2>
+        <form id="appointment-form">
+          <input type="text" id="client-name" placeholder="Client Name" required>
+          <input type="date" id="appointment-date" required>
+          <input type="time" id="appointment-time" required>
+          <select id="session-type">
+            <option value="Individual Therapy">Individual Therapy</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Initial Consultation">Initial Consultation</option>
+          </select>
+          <input type="text" id="session-focus" placeholder="Session Focus (e.g., Anxiety)">
+          <button type="submit">Schedule Appointment</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="client-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Add New Client</h2>
+        <form id="client-form">
+          <input type="text" id="new-client-name" placeholder="Full Name" required>
+          <input type="email" id="client-email" placeholder="Email">
+          <input type="tel" id="client-phone" placeholder="Phone">
+          <textarea id="client-notes" placeholder="Initial notes..."></textarea>
+          <button type="submit">Add Client</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
