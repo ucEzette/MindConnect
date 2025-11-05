@@ -58,3 +58,17 @@ const ChatRoom = () => {
     }
   };
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    const messageData = {
+      roomId,
+      content: newMessage,
+      sender: 'You', // In real app, get from auth context
+      timestamp: new Date().toISOString()
+    };
