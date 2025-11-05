@@ -42,3 +42,19 @@ const ChatRoom = () => {
     }
   };
 
+    const fetchMessages = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages');
+      }
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setMessages([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
