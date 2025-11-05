@@ -14,7 +14,8 @@ const ChatRoom = () => {
   const [roomInfo, setRoomInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
-    useEffect(() => {
+
+  useEffect(() => {
     fetchRoomData();
     fetchMessages();
   }, [roomId]);
@@ -42,7 +43,7 @@ const ChatRoom = () => {
     }
   };
 
-    const fetchMessages = async () => {
+  const fetchMessages = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`);
       if (!response.ok) {
@@ -135,7 +136,7 @@ const ChatRoom = () => {
           flexDirection: 'column', 
           py: 2 
         }}
-              >
+      >
         {/* Messages Area */}
         <Paper 
           elevation={3}
@@ -155,7 +156,7 @@ const ChatRoom = () => {
               </Typography>
             </Box>
           ) : (
-                        messages.map((msg) => (
+            messages.map((msg) => (
               <Box key={msg._id} sx={{ mb: 2 }}>
                 <Card 
                   sx={{ 
@@ -239,5 +240,3 @@ const ChatRoom = () => {
 };
 
 export default ChatRoom;
-
-              
