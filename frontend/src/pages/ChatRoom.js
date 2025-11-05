@@ -1,55 +1,61 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { chatAPI } from '../services/api';
 import {
   Container, Box, Typography, TextField, Button, Paper,
   AppBar, Toolbar, IconButton, Avatar, Card
 } from '@mui/material';
 import { ArrowBack as BackIcon, Send as SendIcon } from '@mui/icons-material';
 
-function ChatRoom() {
+const ChatRoom = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [roomInfo, setRoomInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    loadMessages();
-    // Mock room info
-    setRoomInfo({
-      roomName: 'Anxiety Support Group',
-      topic: 'Managing Daily Anxiety',
-      participants: 12
-    });
+    fetchRoomData();
+    fetchMessages();
   }, [roomId]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const loadMessages = async () => {
+  const fetchRoomData = async () => {
     try {
-      const res = await chatAPI.getRoomMessages(roomId);
-      setMessages(res.data.messages || []);
+      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch room data');
+      }
+      const data = await response.json();
+      setRoomInfo(data);
     } catch (error) {
-      console.error('Failed to load messages:', error);
-      // Mock messages for demo
-      setMessages([
-        {
-          id: 1,
-          content: 'Welcome to the anxiety support group! Feel free to share your thoughts.',
-          User: { name: 'Dr. Sarah Johnson', userType: 'therapist' },
-          createdAt: new Date(Date.now() - 3600000)
-        },
-        {
-          id: 2,
-          content: 'Thank you for creating this safe space. I\'ve been struggling lately.',
-          User: { name: 'Alex', userType: 'patient' },
-          createdAt: new Date(Date.now() - 1800000)
-        }
-      ]);
+      console.error('Error fetching room data:', error);
+      // Fallback room info
+      setRoomInfo({
+        _id: roomId,
+        name: 'Chat Room',
+        participants: []
+      });
+    }
+  };
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch messages');
+      }
+      const data = await response.json();
+      setMessages(data);
+    } catch (error) {
+      console.error('Error fetching messages:', error);
+      setMessages([]);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,49 +63,80 @@ function ChatRoom() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSend = async (e) => {
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
     const messageData = {
       roomId,
       content: newMessage,
-      messageType: 'text'
+      sender: 'You', // In real app, get from auth context
+      timestamp: new Date().toISOString()
     };
 
     try {
-      await chatAPI.saveMessage(messageData);
-      // Add message to local state immediately
+      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      // Add message to local state immediately for better UX
       const newMsg = {
-        id: Date.now(),
+        _id: Date.now().toString(),
         content: newMessage,
-        User: { name: 'You', userType: 'patient' },
-        createdAt: new Date()
+        sender: 'You',
+        timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, newMsg]);
       setNewMessage('');
     } catch (error) {
-      console.error('Failed to send message:', error);
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
     }
   };
+
+  if (loading) {
+    return (
+      <Container sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography>Loading chat room...</Typography>
+      </Container>
+    );
+  }
 
   return (
     <>
       <AppBar position="static" sx={{ bgcolor: '#6d28d9' }}>
         <Toolbar>
-          <IconButton color="inherit" onClick={() => navigate('/chat-rooms')}>
+          <IconButton color="inherit" onClick={() => navigate(-1)}>
             <BackIcon />
           </IconButton>
           <Box>
-            <Typography variant="h6">{roomInfo?.roomName}</Typography>
+            <Typography variant="h6">
+              {roomInfo?.name || 'Chat Room'}
+            </Typography>
             <Typography variant="caption" sx={{ opacity: 0.8 }}>
-              {roomInfo?.participants} participants • {roomInfo?.topic}
+              {roomInfo?.participants ? `${roomInfo.participants.length} participants` : ''}
             </Typography>
           </Box>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md" sx={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column', py: 2 }}>
+      <Container 
+        maxWidth="md" 
+        sx={{ 
+          height: 'calc(100vh - 140px)', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          py: 2 
+        }}
+      >
         {/* Messages Area */}
         <Paper 
           elevation={3}
@@ -112,55 +149,58 @@ function ChatRoom() {
             borderRadius: 2
           }}
         >
-          {messages.map((msg) => (
-            <Box key={msg.id} sx={{ mb: 2 }}>
-              <Card 
-                sx={{ 
-                  p: 2,
-                  ml: msg.User?.userType === 'therapist' ? 0 : 4,
-                  mr: msg.User?.userType === 'therapist' ? 4 : 0,
-                  bgcolor: msg.User?.userType === 'therapist' ? '#e3f2fd' : '#ffffff',
-                  borderLeft: msg.User?.userType === 'therapist' ? '4px solid #6d28d9' : 'none'
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                  <Avatar 
-                    sx={{ 
-                      bgcolor: msg.User?.userType === 'therapist' ? '#6d28d9' : '#4f46e5',
-                      width: 32, 
-                      height: 32, 
-                      mr: 1,
-                      fontSize: '0.8rem'
-                    }}
-                  >
-                    {msg.User?.name?.charAt(0) || 'U'}
-                  </Avatar>
-                  <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                      {msg.User?.name}
-                      {msg.User?.userType === 'therapist' && (
-                        <Typography component="span" variant="caption" sx={{ ml: 1, color: '#6d28d9' }}>
-                          (Therapist)
-                        </Typography>
-                      )}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {new Date(msg.createdAt).toLocaleTimeString()}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                  {msg.content}
-                </Typography>
-              </Card>
+          {messages.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body1" color="text.secondary">
+                No messages yet. Start the conversation!
+              </Typography>
             </Box>
-          ))}
+          ) : (
+            messages.map((msg) => (
+              <Box key={msg._id} sx={{ mb: 2 }}>
+                <Card 
+                  sx={{ 
+                    p: 2,
+                    ml: msg.sender === 'You' ? 4 : 0,
+                    mr: msg.sender === 'You' ? 0 : 4,
+                    bgcolor: msg.sender === 'You' ? '#e3f2fd' : '#ffffff',
+                    borderLeft: msg.sender !== 'You' ? '4px solid #6d28d9' : 'none'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Avatar 
+                      sx={{ 
+                        bgcolor: msg.sender === 'You' ? '#4f46e5' : '#6d28d9',
+                        width: 32, 
+                        height: 32, 
+                        mr: 1,
+                        fontSize: '0.8rem'
+                      }}
+                    >
+                      {msg.sender?.charAt(0) || 'U'}
+                    </Avatar>
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                        {msg.sender}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : 'Now'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+                    {msg.content}
+                  </Typography>
+                </Card>
+              </Box>
+            ))
+          )}
           <div ref={messagesEndRef} />
         </Paper>
 
         {/* Message Input */}
         <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-          <form onSubmit={handleSend}>
+          <form onSubmit={handleSendMessage}>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 fullWidth
@@ -181,6 +221,7 @@ function ChatRoom() {
                 type="submit"
                 variant="contained"
                 endIcon={<SendIcon />}
+                disabled={!newMessage.trim()}
                 sx={{ 
                   bgcolor: '#6d28d9',
                   minWidth: 100,
@@ -196,6 +237,6 @@ function ChatRoom() {
       </Container>
     </>
   );
-}
+};
 
 export default ChatRoom;
