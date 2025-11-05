@@ -196,3 +196,23 @@ const ChatRoom = () => {
           )}
           <div ref={messagesEndRef} />
         </Paper>
+
+        {/* Message Input */}
+        <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+          <form onSubmit={handleSendMessage}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <TextField
+                fullWidth
+                placeholder="Type your message here..."
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                variant="outlined"
+                size="small"
+                multiline
+                maxRows={3}
+                sx={{ 
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2
+                  }
+                }}
+              />
