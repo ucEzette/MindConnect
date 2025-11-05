@@ -1,52 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Register</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1>Welcome</h1>
-      <p>Start mental health journey</p>
-    </div>
-
-    <div class="role-buttons">
-      <button id="patientBtn" class="role-btn active">Patient</button>
-      <button id="therapistBtn" class="role-btn">Therapist</button>
-    </div>
-
-    <form id="registerForm">
-      <label for="fullname">Full Names:</label>
-      <input type="text" id="fullname" placeholder="Enter your full name" required>
-
-      <label for="email">Email Address:</label>
-      <input type="email" id="email" placeholder="Enter your email" required>
-
-      <label for="phone">Phone:</label>
-      <input type="tel" id="phone" placeholder="Enter your phone number" required>
-
-      <label for="password">Password:</label>
-      <input type="password" id="password" placeholder="Enter your password" required>
-
-      <!-- Therapist-only fields (hidden by default) -->
-      <div id="therapistFields" style="display:none;">
-        <label for="specialization">Specialization:</label>
-        <input type="text" id="specialization" placeholder="e.g. Clinical Psychologist">
-
-        <label for="license">License Number:</label>
-        <input type="text" id="license" placeholder="Enter your license ID">
-      </div>
-
-      <button type="submit" class="signup-btn">SIGN UP</button>
-    </form>
-  </div>
-  <footer>
-    &copy; 2025 Healing Spaces | Designed with 💜 by Mind connect
-  </footer>
-
-  <script src="register.js"></script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#6d28d9" />
+    <meta name="description" content="MindConnect - Mental Health Support Platform" />
+    
+    <!-- Add Poppins Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>MindConnect - Mental Health Platform</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
 </html>
