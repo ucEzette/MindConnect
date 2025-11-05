@@ -41,3 +41,32 @@ function LandingPage() {
           </Button>
         </Toolbar>
       </AppBar>
+
+       {/* Hero Section */}
+      <Box
+        id="home"
+        sx={{
+          background: 'linear-gradient(135deg, #ede9fe, #dbeafe)',
+          py: { xs: 6, md: 10 },
+          px: { xs: 2, md: '10%' }
+        }}
+      >
+        <Grid container spacing={4} alignItems="center" justifyContent="center">
+          <Grid item xs={12} md={6}>
+            <Typography
+              variant="h2"
+              sx={{
+                fontSize: { xs: '1.8rem', md: '2.4rem' },
+                color: '#2e1065',
+                fontWeight: 'bold',
+                mb: 2
+              }}
+            >
+              Find Support. Feel Heard. <span style={{ color: '#6d28d9' }}>Heal Together.</span>
+            </Typography>
+            <Typography variant="body1" sx={{ color: '#555', mb: 3 }}>
+              MindConnect helps you connect with licensed therapists, join caring communities, 
+              and access AI-powered support anytime, anywhere.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+              <Button
