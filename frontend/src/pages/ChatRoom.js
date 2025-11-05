@@ -155,3 +155,44 @@ const ChatRoom = () => {
               </Typography>
             </Box>
           ) : (
+                        messages.map((msg) => (
+              <Box key={msg._id} sx={{ mb: 2 }}>
+                <Card 
+                  sx={{ 
+                    p: 2,
+                    ml: msg.sender === 'You' ? 4 : 0,
+                    mr: msg.sender === 'You' ? 0 : 4,
+                    bgcolor: msg.sender === 'You' ? '#e3f2fd' : '#ffffff',
+                    borderLeft: msg.sender !== 'You' ? '4px solid #6d28d9' : 'none'
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                    <Avatar 
+                      sx={{ 
+                        bgcolor: msg.sender === 'You' ? '#4f46e5' : '#6d28d9',
+                        width: 32, 
+                        height: 32, 
+                        mr: 1,
+                        fontSize: '0.8rem'
+                      }}
+                    >
+                      {msg.sender?.charAt(0) || 'U'}
+                    </Avatar>
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                        {msg.sender}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : 'Now'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+                    {msg.content}
+                  </Typography>
+                </Card>
+              </Box>
+            ))
+          )}
+          <div ref={messagesEndRef} />
+        </Paper>
