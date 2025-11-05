@@ -100,3 +100,38 @@ const ChatRoom = () => {
       alert('Failed to send message. Please try again.');
     }
   };
+
+  if (loading) {
+    return (
+      <Container sx={{ mt: 4, textAlign: 'center' }}>
+        <Typography>Loading chat room...</Typography>
+      </Container>
+    );
+  }
+
+  return (
+    <>
+      <AppBar position="static" sx={{ bgcolor: '#6d28d9' }}>
+        <Toolbar>
+          <IconButton color="inherit" onClick={() => navigate(-1)}>
+            <BackIcon />
+          </IconButton>
+          <Box>
+            <Typography variant="h6">
+              {roomInfo?.name || 'Chat Room'}
+            </Typography>
+            <Typography variant="caption" sx={{ opacity: 0.8 }}>
+              {roomInfo?.participants ? `${roomInfo.participants.length} participants` : ''}
+            </Typography>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Container 
+        maxWidth="md" 
+        sx={{ 
+          height: 'calc(100vh - 140px)', 
+          display: 'flex', 
+          flexDirection: 'column', 
+          py: 2 
+        }}
