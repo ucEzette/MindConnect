@@ -72,3 +72,31 @@ const ChatRoom = () => {
       sender: 'You', // In real app, get from auth context
       timestamp: new Date().toISOString()
     };
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(messageData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+
+      // Add message to local state immediately for better UX
+      const newMsg = {
+        _id: Date.now().toString(),
+        content: newMessage,
+        sender: 'You',
+        timestamp: new Date().toISOString()
+      };
+      setMessages(prev => [...prev, newMsg]);
+      setNewMessage('');
+    } catch (error) {
+      console.error('Error sending message:', error);
+      alert('Failed to send message. Please try again.');
+    }
+  };
