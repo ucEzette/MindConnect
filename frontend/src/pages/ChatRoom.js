@@ -216,3 +216,28 @@ const ChatRoom = () => {
                   }
                 }}
               />
+              <Button
+                type="submit"
+                variant="contained"
+                endIcon={<SendIcon />}
+                disabled={!newMessage.trim()}
+                sx={{ 
+                  bgcolor: '#6d28d9',
+                  minWidth: 100,
+                  borderRadius: 2,
+                  '&:hover': { bgcolor: '#5b21b6' }
+                }}
+              >
+                Send
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+      </Container>
+    </>
+  );
+};
+
+export default ChatRoom;
+
+              
