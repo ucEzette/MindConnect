@@ -135,3 +135,23 @@ const ChatRoom = () => {
           flexDirection: 'column', 
           py: 2 
         }}
+              >
+        {/* Messages Area */}
+        <Paper 
+          elevation={3}
+          sx={{ 
+            flex: 1, 
+            overflow: 'auto', 
+            p: 2, 
+            mb: 2, 
+            bgcolor: '#f9f8ff',
+            borderRadius: 2
+          }}
+        >
+          {messages.length === 0 ? (
+            <Box sx={{ textAlign: 'center', py: 4 }}>
+              <Typography variant="body1" color="text.secondary">
+                No messages yet. Start the conversation!
+              </Typography>
+            </Box>
+          ) : (
