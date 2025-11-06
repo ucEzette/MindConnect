@@ -70,3 +70,203 @@ function LandingPage() {
             </Typography>
             <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
               <Button
+              variant="contained"
+                onClick={() => navigate('/register')}
+                sx={{
+                  bgcolor: '#6d28d9',
+                  borderRadius: '25px',
+                  px: 3,
+                  py: 1.5,
+                  '&:hover': { bgcolor: '#5b21b6' }
+                }}
+              >
+                Get Started
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => navigate('/register')}
+                sx={{
+                  borderColor: '#6d28d9',
+                  color: '#6d28d9',
+                  borderRadius: '25px',
+                  px: 3,
+                  py: 1.5,
+                  '&:hover': { bgcolor: '#f5f3ff', borderColor: '#6d28d9' }
+                }}
+              >
+                Talk to AI Assistant
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+
+      {/* Features Section */}
+      <Box id="features" sx={{ py: 8, px: { xs: 2, md: '10%' }, textAlign: 'center' }}>
+        <Typography variant="h3" sx={{ mb: 5, fontWeight: 'bold', color: '#2e1065' }}>
+          What We Offer
+        </Typography>
+        <Grid container spacing={3} justifyContent="center">
+          {[
+            {
+              title: 'Talk to Therapists',
+              description: 'Book one-on-one sessions with certified mental health therapists.'
+            },
+            {
+              title: 'Join Communities',
+              description: 'Share experiences and find strength in supportive peer groups.'
+            },
+            {
+              title: '24/7 AI Assistant',
+              description: 'Get instant emotional support and mental wellness tips.'
+            }
+          ].map((feature, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  bgcolor: '#f3f0ff',
+                  borderRadius: '15px',
+                  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+                  height: '100%'
+                }}
+              >
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#6d28d9' }}>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#555' }}>
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* About Section */}
+      <Box id="about" sx={{ py: 8, px: { xs: 2, md: '10%' }, textAlign: 'center', bgcolor: '#e0f2fe' }}>
+        <Typography variant="h3" sx={{ mb: 5, fontWeight: 'bold', color: '#2e1065' }}>
+          How It Works
+        </Typography>
+        <Grid container spacing={3} justifyContent="center">
+          {[
+            { title: 'Create Account', description: 'Sign up securely as a patient or therapist.' },
+            { title: 'Connect', description: 'Find therapists, join chat rooms, or start a conversation with AI.' },
+            { title: 'Grow', description: 'Track your emotional journey.' }
+          ].map((step, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  bgcolor: '#ffffff',
+                  borderRadius: '15px',
+                  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+                  height: '100%'
+                }}
+              >
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold', color: '#6d28d9' }}>
+                    {step.title}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: '#555' }}>
+                    {step.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Testimonials Section */}
+      <Box sx={{ py: 8, px: { xs: 2, md: '10%' }, textAlign: 'center', bgcolor: '#f9f8ff' }}>
+        <Typography variant="h3" sx={{ mb: 5, fontWeight: 'bold', color: '#2e1065' }}>
+          What Our Users Say
+        </Typography>
+        <Grid container spacing={3} justifyContent="center">
+          {[
+            { quote: '"MindConnect gave me hope and the courage to open up again."', author: 'Faith, Community Member' },
+            { quote: '"As a therapist, it\'s fulfilling to reach people who truly need care."', author: 'Dr. Sarah' }
+          ].map((testimonial, index) => (
+            <Grid item xs={12} sm={6} md={5} key={index}>
+              <Card
+                sx={{
+                  bgcolor: '#f3f0ff',
+                  borderRadius: '15px',
+                  boxShadow: '0 3px 6px rgba(0,0,0,0.1)',
+                  fontStyle: 'italic'
+                }}
+              >
+                <CardContent sx={{ p: 3 }}>
+                  <Typography variant="body1" sx={{ mb: 2, color: '#555' }}>
+                    {testimonial.quote}
+                  </Typography>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: '#6d28d9' }}>
+                    {testimonial.author}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+
+      {/* Call to Action */}
+      <Box
+        sx={{
+          background: 'linear-gradient(135deg, #6d28d9, #4f46e5)',
+          py: 8,
+          px: { xs: 2, md: '10%' },
+          textAlign: 'center',
+          color: '#fff'
+        }}
+      >
+        <Typography variant="h3" sx={{ mb: 2, fontWeight: 'bold' }}>
+          Your healing journey starts here
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 4 }}>
+          Join thousands finding safety with MindConnect today.
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Button
+            variant="contained"
+            onClick={() => navigate('/register')}
+            sx={{
+              bgcolor: '#fff',
+              color: '#6d28d9',
+              borderRadius: '25px',
+              px: 3,
+              py: 1.5,
+              '&:hover': { bgcolor: '#f3f0ff' }
+            }}
+          >
+            Join as Patient
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => navigate('/register')}
+            sx={{
+              borderColor: '#fff',
+              color: '#fff',
+              borderRadius: '25px',
+              px: 3,
+              py: 1.5,
+              '&:hover': { bgcolor: '#7c3aed', borderColor: '#fff' }
+            }}
+          >
+            Join as Therapist
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Footer */}
+      <Box sx={{ bgcolor: '#1e1b4b', color: '#ccc', textAlign: 'center', py: 3 }}>
+        <Typography variant="body2">
+          © 2025 MindConnect. All Rights Reserved.
+        </Typography>
+      </Box>
+    </Box>
+  );
+}
+
+export default LandingPage;
