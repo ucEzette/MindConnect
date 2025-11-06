@@ -63,3 +63,17 @@ io.on('connection', (socket) => {
    socket.on('leave-room', (roomId) => {
     socket.leave(roomId);
   });
+
+  socket.on('send-message', async (data) => {
+    const { roomId, content, userId, userName } = data;
+    try {
+      const message = await Message.create({
+        roomId, userId, content, messageType: 'text'
+      });
+      const messageData = {
+        id: message.id,
+        content: message.content,
+        userId, userName,
+        messageType: message.messageType,
+        createdAt: message.createdAt
+      };
