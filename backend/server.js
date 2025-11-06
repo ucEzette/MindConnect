@@ -41,3 +41,25 @@ app.use('/api/ai', aiRoutes);
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'MindConnect API is running' });
 });
+
+const connectedUsers = new Map();
+
+io.on('connection', (socket) => {
+  console.log('New client connected:', socket.id);
+
+  socket.on('user-connected', (userId) => {
+    connectedUsers.set(socket.id, userId);
+    console.log(`User ${userId} connected`);
+  });
+
+  socket.on('join-room', (roomId) => {
+    socket.join(roomId);
+    socket.to(roomId).emit('user-joined', {
+      userId: connectedUsers.get(socket.id),
+      socketId: socket.id
+    });
+  });
+
+   socket.on('leave-room', (roomId) => {
+    socket.leave(roomId);
+  });
