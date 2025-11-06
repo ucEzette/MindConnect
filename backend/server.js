@@ -89,3 +89,14 @@ io.on('connection', (socket) => {
       userId: data.userId, userName: data.userName
     });
   });
+
+    socket.on('stop-typing', (data) => {
+    socket.to(data.roomId).emit('user-stop-typing', { userId: data.userId });
+  });
+
+  socket.on('disconnect', () => {
+    const userId = connectedUsers.get(socket.id);
+    connectedUsers.delete(socket.id);
+    console.log('Client disconnected:', socket.id);
+  });
+});
