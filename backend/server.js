@@ -77,3 +77,15 @@ io.on('connection', (socket) => {
         messageType: message.messageType,
         createdAt: message.createdAt
       };
+           io.to(roomId).emit('receive-message', messageData);
+    } catch (error) {
+      console.error('Error saving message:', error);
+      socket.emit('message-error', { error: 'Failed to send message' });
+    }
+  });
+
+  socket.on('typing', (data) => {
+    socket.to(data.roomId).emit('user-typing', {
+      userId: data.userId, userName: data.userName
+    });
+  });
