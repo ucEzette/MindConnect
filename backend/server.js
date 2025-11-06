@@ -22,3 +22,22 @@ const io = socketIo(server, {
     methods: ['GET', 'POST']
   }
 });
+
+app.use(helmet());
+app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }));
+app.use(express.json());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100
+});
+app.use('/api', limiter);
+
+app.use('/api/auth', authRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/appointments', appointmentRoutes);
+app.use('/api/ai', aiRoutes);
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'MindConnect API is running' });
+});
