@@ -1,233 +1,169 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { chatAPI } from '../services/api';
+import socketService from '../services/socket';
 import {
-  Container, Box, Typography, TextField, Button, Paper,
-  AppBar, Toolbar, IconButton, Avatar, Card
+  Container,
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Paper,
+  List,
+  ListItem,
+  AppBar,
+  Toolbar,
+  IconButton
 } from '@mui/material';
 import { ArrowBack as BackIcon, Send as SendIcon } from '@mui/icons-material';
 
-const ChatRoom = () => {
+function ChatRoom() {
   const { roomId } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  const [roomInfo, setRoomInfo] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [room, setRoom] = useState(null);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    fetchRoomData();
-    fetchMessages();
+    loadRoom();
+    loadMessages();
+    joinRoom();
+
+    return () => {
+      socketService.leaveRoom(roomId);
+    };
   }, [roomId]);
+
+  useEffect(() => {
+    socketService.onMessage((message) => {
+      setMessages((prev) => [...prev, message]);
+    });
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  const fetchRoomData = async () => {
+  const loadRoom = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch room data');
-      }
-      const data = await response.json();
-      setRoomInfo(data);
+      const response = await chatAPI.getRooms();
+      const foundRoom = response.data.rooms.find(r => r.id === roomId);
+      setRoom(foundRoom);
     } catch (error) {
-      console.error('Error fetching room data:', error);
-      // Fallback room info
-      setRoomInfo({
-        _id: roomId,
-        name: 'Chat Room',
-        participants: []
-      });
+      console.error('Failed to load room:', error);
     }
   };
 
-  const fetchMessages = async () => {
+  const loadMessages = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch messages');
-      }
-      const data = await response.json();
-      setMessages(data);
+      const response = await chatAPI.getRoomMessages(roomId);
+      setMessages(response.data.messages);
     } catch (error) {
-      console.error('Error fetching messages:', error);
-      setMessages([]);
-    } finally {
-      setLoading(false);
+      console.error('Failed to load messages:', error);
     }
+  };
+
+  const joinRoom = () => {
+    socketService.joinRoom(roomId);
   };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = (e) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
-
-    const messageData = {
-      roomId,
-      content: newMessage,
-      sender: 'You', // In real app, get from auth context
-      timestamp: new Date().toISOString()
-    };
-
-    try {
-      const response = await fetch(`http://localhost:5000/api/chat/rooms/${roomId}/messages`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(messageData)
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send message');
-      }
-
-      // Add message to local state immediately for better UX
-      const newMsg = {
-        _id: Date.now().toString(),
+    
+    if (newMessage.trim()) {
+      socketService.sendMessage({
+        roomId,
         content: newMessage,
-        sender: 'You',
-        timestamp: new Date().toISOString()
-      };
-      setMessages(prev => [...prev, newMsg]);
+        userId: user.id,
+        userName: user.name
+      });
+      
       setNewMessage('');
-    } catch (error) {
-      console.error('Error sending message:', error);
-      alert('Failed to send message. Please try again.');
     }
   };
 
-  if (loading) {
-    return (
-      <Container sx={{ mt: 4, textAlign: 'center' }}>
-        <Typography>Loading chat room...</Typography>
-      </Container>
-    );
-  }
-
   return (
     <>
-      <AppBar position="static" sx={{ bgcolor: '#6d28d9' }}>
+      <AppBar position="static">
         <Toolbar>
-          <IconButton color="inherit" onClick={() => navigate(-1)}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={() => navigate('/dashboard')}
+          >
             <BackIcon />
           </IconButton>
-          <Box>
-            <Typography variant="h6">
-              {roomInfo?.name || 'Chat Room'}
-            </Typography>
-            <Typography variant="caption" sx={{ opacity: 0.8 }}>
-              {roomInfo?.participants ? `${roomInfo.participants.length} participants` : ''}
-            </Typography>
-          </Box>
+          <Typography variant="h6">
+            {room?.roomName || 'Chat Room'}
+          </Typography>
         </Toolbar>
       </AppBar>
 
-      <Container 
-        maxWidth="md" 
-        sx={{ 
-          height: 'calc(100vh - 140px)', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          py: 2 
-        }}
-      >
-        {/* Messages Area */}
-        <Paper 
+      <Container maxWidth="md" sx={{ height: 'calc(100vh - 140px)', display: 'flex', flexDirection: 'column', py: 2 }}>
+        <Paper
           elevation={3}
-          sx={{ 
-            flex: 1, 
-            overflow: 'auto', 
-            p: 2, 
-            mb: 2, 
-            bgcolor: '#f9f8ff',
-            borderRadius: 2
+          sx={{
+            flex: 1,
+            overflow: 'auto',
+            p: 2,
+            mb: 2,
+            backgroundColor: '#f5f5f5'
           }}
         >
-          {messages.length === 0 ? (
-            <Box sx={{ textAlign: 'center', py: 4 }}>
-              <Typography variant="body1" color="text.secondary">
-                No messages yet. Start the conversation!
-              </Typography>
-            </Box>
-          ) : (
-            messages.map((msg) => (
-              <Box key={msg._id} sx={{ mb: 2 }}>
-                <Card 
-                  sx={{ 
-                    p: 2,
-                    ml: msg.sender === 'You' ? 4 : 0,
-                    mr: msg.sender === 'You' ? 0 : 4,
-                    bgcolor: msg.sender === 'You' ? '#e3f2fd' : '#ffffff',
-                    borderLeft: msg.sender !== 'You' ? '4px solid #6d28d9' : 'none'
+          <List>
+            {messages.map((msg) => (
+              <ListItem
+                key={msg.id}
+                sx={{
+                  flexDirection: 'column',
+                  alignItems: msg.userId === user.id ? 'flex-end' : 'flex-start',
+                  mb: 1
+                }}
+              >
+                <Paper
+                  sx={{
+                    p: 1.5,
+                    maxWidth: '70%',
+                    backgroundColor: msg.userId === user.id ? '#1976d2' : '#fff',
+                    color: msg.userId === user.id ? '#fff' : '#000'
                   }}
                 >
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <Avatar 
-                      sx={{ 
-                        bgcolor: msg.sender === 'You' ? '#4f46e5' : '#6d28d9',
-                        width: 32, 
-                        height: 32, 
-                        mr: 1,
-                        fontSize: '0.8rem'
-                      }}
-                    >
-                      {msg.sender?.charAt(0) || 'U'}
-                    </Avatar>
-                    <Box>
-                      <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                        {msg.sender}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString() : 'Now'}
-                      </Typography>
-                    </Box>
-                  </Box>
-                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                    {msg.content}
+                  <Typography variant="caption" display="block" sx={{ fontWeight: 'bold' }}>
+                    {msg.userName || msg.User?.name}
                   </Typography>
-                </Card>
-              </Box>
-            ))
-          )}
-          <div ref={messagesEndRef} />
+                  <Typography variant="body1">{msg.content}</Typography>
+                  <Typography variant="caption" display="block" sx={{ mt: 0.5, opacity: 0.7 }}>
+                    {new Date(msg.createdAt).toLocaleTimeString()}
+                  </Typography>
+                </Paper>
+              </ListItem>
+            ))}
+            <div ref={messagesEndRef} />
+          </List>
         </Paper>
 
-        {/* Message Input */}
-        <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
+        <Paper elevation={3} sx={{ p: 2 }}>
           <form onSubmit={handleSendMessage}>
             <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
                 fullWidth
-                placeholder="Type your message here..."
+                placeholder="Type your message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 variant="outlined"
                 size="small"
-                multiline
-                maxRows={3}
-                sx={{ 
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 2
-                  }
-                }}
               />
               <Button
                 type="submit"
                 variant="contained"
                 endIcon={<SendIcon />}
-                disabled={!newMessage.trim()}
-                sx={{ 
-                  bgcolor: '#6d28d9',
-                  minWidth: 100,
-                  borderRadius: 2,
-                  '&:hover': { bgcolor: '#5b21b6' }
-                }}
               >
                 Send
               </Button>
@@ -237,6 +173,6 @@ const ChatRoom = () => {
       </Container>
     </>
   );
-};
+}
 
 export default ChatRoom;
