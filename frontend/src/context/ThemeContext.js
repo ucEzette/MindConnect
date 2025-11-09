@@ -29,47 +29,147 @@ export const ThemeProvider = ({ children }) => {
         palette: {
           mode,
           primary: {
-            main: mode === 'light' ? '#6d28d9' : '#a78bfa',
-            light: '#8b5cf6',
-            dark: '#5b21b6',
+            main: '#3B4A7A', // Deep Indigo
+            light: '#5A6B9E',
+            dark: '#2A3556',
+            contrastText: '#FFFFFF',
           },
           secondary: {
-            main: mode === 'light' ? '#06b6d4' : '#22d3ee',
-            light: '#67e8f9',
-            dark: '#0891b2',
+            main: '#9B8FEF', // Pastel Lavender
+            light: '#C4B9FF',
+            dark: '#7565D1',
+            contrastText: '#FFFFFF',
+          },
+          accent: {
+            main: '#D4A24A', // Muted Mustard
+            light: '#E8BF6E',
+            dark: '#B58633',
           },
           success: {
-            main: '#10b981',
-            light: '#34d399',
-            dark: '#059669',
+            main: '#4CAF50',
+            light: '#81C784',
+            dark: '#388E3C',
           },
           warning: {
-            main: '#f59e0b',
-            light: '#fbbf24',
-            dark: '#d97706',
+            main: '#D4A24A', // Using accent color
+            light: '#E8BF6E',
+            dark: '#B58633',
           },
           error: {
-            main: '#ef4444',
-            light: '#f87171',
-            dark: '#dc2626',
+            main: '#E57373',
+            light: '#EF9A9A',
+            dark: '#D32F2F',
           },
           background: {
-            default: mode === 'light' ? '#f9fafb' : '#111827',
-            paper: mode === 'light' ? '#ffffff' : '#1f2937',
+            default: mode === 'light' ? '#F2F2F4' : '#1A1D2E', // Warm Gray / Dark
+            paper: mode === 'light' ? '#FFFFFF' : '#262B3F',
           },
           text: {
-            primary: mode === 'light' ? '#111827' : '#f9fafb',
-            secondary: mode === 'light' ? '#6b7280' : '#9ca3af',
+            primary: mode === 'light' ? '#2A2A2E' : '#F2F2F4',
+            secondary: mode === 'light' ? '#5A5A5F' : '#B8B8BE',
           },
+          divider: mode === 'light' ? '#E0E0E2' : '#3A3F52',
         },
         typography: {
-          fontFamily: '"Poppins", "Roboto", "Helvetica", "Arial", sans-serif',
-          h1: { fontWeight: 700 },
-          h2: { fontWeight: 700 },
-          h3: { fontWeight: 600 },
-          h4: { fontWeight: 600 },
-          h5: { fontWeight: 600 },
-          h6: { fontWeight: 600 },
+          fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+          fontSize: 16,
+          fontWeightLight: 300,
+          fontWeightRegular: 400,
+          fontWeightMedium: 500,
+          fontWeightBold: 600,
+          h1: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 700,
+            fontSize: '3.5rem',
+            lineHeight: 1.2,
+            letterSpacing: '-0.01em',
+          },
+          h2: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 700,
+            fontSize: '2.75rem',
+            lineHeight: 1.25,
+            letterSpacing: '-0.005em',
+          },
+          h3: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '2.25rem',
+            lineHeight: 1.3,
+            letterSpacing: '0em',
+          },
+          h4: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '1.875rem',
+            lineHeight: 1.35,
+            letterSpacing: '0.01em',
+          },
+          h5: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '1.5rem',
+            lineHeight: 1.4,
+            letterSpacing: '0.01em',
+          },
+          h6: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '1.25rem',
+            lineHeight: 1.45,
+            letterSpacing: '0.01em',
+          },
+          subtitle1: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 500,
+            fontSize: '1rem',
+            lineHeight: 1.5,
+            letterSpacing: '0.01em',
+          },
+          subtitle2: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 500,
+            fontSize: '0.875rem',
+            lineHeight: 1.5,
+            letterSpacing: '0.01em',
+          },
+          body1: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 400,
+            fontSize: '1rem',
+            lineHeight: 1.5,
+            letterSpacing: '0.01em',
+          },
+          body2: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 400,
+            fontSize: '0.875rem',
+            lineHeight: 1.43,
+            letterSpacing: '0.01em',
+          },
+          button: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '0.875rem',
+            lineHeight: 1.75,
+            letterSpacing: '0.02em',
+            textTransform: 'none',
+          },
+          caption: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 400,
+            fontSize: '0.75rem',
+            lineHeight: 1.4,
+            letterSpacing: '0.01em',
+          },
+          overline: {
+            fontFamily: '"Inter", sans-serif',
+            fontWeight: 600,
+            fontSize: '0.75rem',
+            lineHeight: 2,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+          },
         },
         shape: {
           borderRadius: 12,
@@ -78,9 +178,28 @@ export const ThemeProvider = ({ children }) => {
           MuiButton: {
             styleOverrides: {
               root: {
-                textTransform: 'none',
+                borderRadius: 8,
+                padding: '10px 24px',
                 fontWeight: 600,
-                borderRadius: 25,
+                letterSpacing: '0.02em',
+              },
+              containedPrimary: {
+                backgroundColor: '#3B4A7A',
+                '&:hover': {
+                  backgroundColor: '#2A3556',
+                },
+              },
+              containedSecondary: {
+                backgroundColor: '#9B8FEF',
+                '&:hover': {
+                  backgroundColor: '#7565D1',
+                },
+              },
+              outlined: {
+                borderWidth: 2,
+                '&:hover': {
+                  borderWidth: 2,
+                },
               },
             },
           },
@@ -89,8 +208,26 @@ export const ThemeProvider = ({ children }) => {
               root: {
                 borderRadius: 16,
                 boxShadow: mode === 'light' 
-                  ? '0 4px 6px -1px rgb(0 0 0 / 0.1)' 
-                  : '0 4px 6px -1px rgb(0 0 0 / 0.3)',
+                  ? '0 4px 12px rgba(59, 74, 122, 0.08)' 
+                  : '0 4px 12px rgba(0, 0, 0, 0.3)',
+              },
+            },
+          },
+          MuiChip: {
+            styleOverrides: {
+              root: {
+                borderRadius: 8,
+                fontWeight: 500,
+                letterSpacing: '0.01em',
+              },
+            },
+          },
+          MuiTextField: {
+            styleOverrides: {
+              root: {
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 8,
+                },
               },
             },
           },

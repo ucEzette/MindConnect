@@ -47,7 +47,7 @@ function LandingPage() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box 
               component="img" 
-              src="/logo.png" 
+              src="/output-onlinepngtools.png" 
               alt="MindConnect" 
               sx={{ width: 40, height: 40 }} 
             />
@@ -135,7 +135,7 @@ function LandingPage() {
                   lineHeight: 1.6 
                 }}
               >
-                One integrated platform combining professional therapy, AI-powered support, and peer communities—because mental health care should never be fragmented.
+                One integrated platform combining professional therapy, AI-powered support, and peer communities, because mental health care should never be fragmented.
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                 <Button 
@@ -166,7 +166,7 @@ function LandingPage() {
             <Grid item xs={12} md={6}>
               <Box 
                 component="img" 
-                src="https://cdn-icons-png.flaticon.com/512/4032/4032943.png" 
+                src="./output-onlinepngtools.png" 
                 alt="Mental health" 
                 sx={{ 
                   width: '100%', 
@@ -489,7 +489,7 @@ function LandingPage() {
             <Grid item xs={12} md={8}>
               <Typography variant="body2" align="right" sx={{ opacity: 0.8 }}>
                 © 2025 MindConnect. All Rights Reserved.<br />
-                <strong>Crisis Support:</strong> 988 (US) | 116 123 (UK) | Your local emergency services
+                <strong>Crisis Support:</strong> 988 (RW) | 116 123 (RW) | Your local emergency services
               </Typography>
             </Grid>
           </Grid>
