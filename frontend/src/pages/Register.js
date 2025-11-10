@@ -15,6 +15,8 @@ import {
   MenuItem
 } from '@mui/material';
 
+
+
 function Register() {
   const navigate = useNavigate();
   const { register, error } = useAuth();
