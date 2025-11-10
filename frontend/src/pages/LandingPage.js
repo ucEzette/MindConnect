@@ -47,7 +47,7 @@ function LandingPage() {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <Box 
               component="img" 
-              src="/output-onlinepngtools.png" 
+              src="/connect.png" 
               alt="MindConnect" 
               sx={{ width: 40, height: 40 }} 
             />
@@ -166,7 +166,7 @@ function LandingPage() {
             <Grid item xs={12} md={6}>
               <Box 
                 component="img" 
-                src="./output-onlinepngtools.png" 
+                src="./connect.png" 
                 alt="Mental health" 
                 sx={{ 
                   width: '100%', 
@@ -205,7 +205,7 @@ function LandingPage() {
               mx: 'auto' 
             }}
           >
-            <strong>970 million people globally</strong> suffer from mental health disorders, yet <strong>85% face a treatment gap</strong> in low and middle-income countries. Existing solutions are fragmented—therapy apps lack community, community apps lack professional support. Users juggle multiple platforms during their most vulnerable moments.
+            <strong>970 million people globally</strong> suffer from mental health disorders, yet <strong>85% face a treatment gap</strong> in low and middle-income countries. Existing solutions are fragmented therapy apps lack community, community apps lack professional support. Users juggle multiple platforms during their most vulnerable moments.
           </Typography>
           <Grid container spacing={3}>
             {stats.map((stat, index) => (
