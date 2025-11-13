@@ -11,24 +11,45 @@ function LandingPage() {
   return (
     <Box sx={{ bgcolor: '#f9f8ff' }}>
       {/* Navbar */}
-      <AppBar position="sticky" sx={{ bgcolor: '#ffffff', color: '#333', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
-        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: '10%' } }}>
-          <Typography variant="h5" sx={{ color: '#6d28d9', fontWeight: 'bold', fontFamily: '"Poppins", sans-serif' }}>
-            MindConnect
-          </Typography>
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 3 }}>
-            <Button href="#home" sx={{ color: '#333', fontWeight: 500, '&:hover': { color: '#6d28d9' } }}>
-              Home
-            </Button>
-            <Button href="#features" sx={{ color: '#333', fontWeight: 500, '&:hover': { color: '#6d28d9' } }}>
-              Features
-            </Button>
-            <Button href="#about" sx={{ color: '#333', fontWeight: 500, '&:hover': { color: '#6d28d9' } }}>
-              About
-            </Button>
-            <Button href="#contact" sx={{ color: '#333', fontWeight: 500, '&:hover': { color: '#6d28d9' } }}>
-              Contact
-            </Button>
+      <AppBar 
+        position="sticky" 
+        elevation={0} 
+        sx={{ 
+          bgcolor: alpha(theme.palette.background.paper, 0.95), 
+          backdropFilter: 'blur(10px)', 
+          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}` 
+        }}
+      >
+        <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, md: 8 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box 
+              component="img" 
+              src="/connect.png" 
+              alt="MindConnect" 
+              sx={{ width: 40, height: 40 }} 
+            />
+            <Typography 
+              variant="h5" 
+              sx={{ 
+                fontWeight: 700, 
+                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`, 
+                WebkitBackgroundClip: 'text', 
+                WebkitTextFillColor: 'transparent' 
+              }}
+            >
+              MindConnect
+            </Typography>
+          </Box>
+          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 4 }}>
+            {['Home', 'Features', 'About', 'Contact'].map((item) => (
+              <Button 
+                key={item} 
+                href={`#${item.toLowerCase()}`} 
+                sx={{ color: theme.palette.text.primary, fontWeight: 500 }}
+              >
+                {item}
+              </Button>
+            ))}
           </Box>
           <Button
             variant="contained"
@@ -97,17 +118,109 @@ function LandingPage() {
                   '&:hover': { bgcolor: '#f5f3ff', borderColor: '#6d28d9' }
                 }}
               >
-                Talk to AI Assistant
-              </Button>
-            </Box>
+                One integrated platform combining professional therapy, AI-powered support, and peer communities, because mental health care should never be fragmented.
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                <Button 
+                  variant="contained" 
+                  size="large" 
+                  onClick={() => navigate('/register')} 
+                  endIcon={<ArrowForward />} 
+                  sx={{ px: 4, py: 1.5, fontSize: '1.1rem' }}
+                >
+                  Get Started Free
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  size="large" 
+                  onClick={() => navigate('/register')} 
+                  sx={{ 
+                    px: 4, 
+                    py: 1.5, 
+                    fontSize: '1.1rem', 
+                    borderWidth: 2, 
+                    '&:hover': { borderWidth: 2 } 
+                  }}
+                >
+                  Talk to AI
+                </Button>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Box 
+                component="img" 
+                src="./connect.png" 
+                alt="Mental health" 
+                sx={{ 
+                  width: '100%', 
+                  maxWidth: 400, 
+                  mx: 'auto', 
+                  display: 'block', 
+                  filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))' 
+                }} 
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6} sx={{ textAlign: 'center' }}>
-            <Box
-              component="img"
-              src="https://cdn-icons-png.flaticon.com/512/4032/4032943.png"
-              alt="Mental health illustration"
-              sx={{ width: { xs: '200px', md: '280px' }, maxWidth: '100%' }}
-            />
+        </Container>
+      </Box>
+
+      {/* Problem Statement */}
+      <Box 
+        sx={{ 
+          py: 8, 
+          px: { xs: 2, md: 8 }, 
+          bgcolor: theme.palette.mode === 'dark' 
+            ? alpha(theme.palette.error.main, 0.05) 
+            : alpha(theme.palette.error.main, 0.03) 
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography variant="h3" align="center" sx={{ fontWeight: 700, mb: 3 }}>
+            The Mental Health Crisis
+          </Typography>
+          <Typography 
+            variant="h6" 
+            align="center" 
+            sx={{ 
+              color: theme.palette.text.secondary, 
+              mb: 6, 
+              maxWidth: 800, 
+              mx: 'auto' 
+            }}
+          >
+            <strong>970 million people globally</strong> suffer from mental health disorders, yet <strong>85% face a treatment gap</strong> in low and middle-income countries. Existing solutions are fragmented therapy apps lack community, community apps lack professional support. Users juggle multiple platforms during their most vulnerable moments.
+          </Typography>
+          <Grid container spacing={3}>
+            {stats.map((stat, index) => (
+              <Grid item xs={12} md={4} key={index}>
+                <Card 
+                  sx={{ 
+                    textAlign: 'center', 
+                    py: 3, 
+                    background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)}, ${alpha(theme.palette.secondary.main, 0.1)})` 
+                  }}
+                >
+                  <CardContent>
+                    <Typography 
+                      variant="h2" 
+                      sx={{ 
+                        fontWeight: 800, 
+                        color: theme.palette.primary.main, 
+                        mb: 1 
+                      }}
+                    >
+                      {stat.number}
+                    </Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+                      {stat.label}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                      {stat.sublabel}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
           </Grid>
         </Grid>
       </Box>
