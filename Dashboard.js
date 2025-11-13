@@ -140,3 +140,5 @@ try {
   console.error('React render error:', error);
   ReactDOM.render(<PatientDashboard />, document.getElementById('root'));
 }
+
+
